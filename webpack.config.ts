@@ -65,7 +65,7 @@ module.exports = (env: { production: boolean }) => ({
         ],
       },
       {
-        test: /\.tsx$/i,
+        test: /\.tsx?$/i,
         exclude: /node_modules/,
         use: [
           { loader: 'babel-loader', options: { cacheDirectory: true } },

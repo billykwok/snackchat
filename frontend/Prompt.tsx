@@ -1,6 +1,23 @@
 import { css } from '@linaria/core';
+import { useEffect } from 'react';
 
-export function Prompt({ paragraphs }: { paragraphs: string[] }) {
+import { voice } from './speech';
+
+export function Prompt({
+  paragraphs,
+  ...rest
+}: {
+  paragraphs: string[];
+  [key: string]: any;
+}) {
+  useEffect(() => {
+    for (const p of paragraphs) {
+      const utterance = new SpeechSynthesisUtterance(p);
+      utterance.voice = voice;
+      console.log(p);
+      speechSynthesis.speak(utterance);
+    }
+  }, []);
   return (
     <div
       className={css`
@@ -8,12 +25,15 @@ export function Prompt({ paragraphs }: { paragraphs: string[] }) {
         align-items: center;
         justify-content: center;
         height: 100%;
+        color: #fff;
+        background: #000;
       `}
+      {...rest}
     >
       <div
         className={css`
           display: block;
-          margin: 4rem;
+          margin: 8rem;
           text-align: center;
           font-size: 5rem;
           > p {
@@ -22,8 +42,8 @@ export function Prompt({ paragraphs }: { paragraphs: string[] }) {
           }
         `}
       >
-        {paragraphs.map((p) => (
-          <p>{p}</p>
+        {paragraphs.map((p, i) => (
+          <p key={i}>{p}</p>
         ))}
       </div>
     </div>

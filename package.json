@@ -1,5 +1,5 @@
 {
-  "name": "immersive-emotion",
+  "name": "snackchat",
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
@@ -44,7 +44,7 @@
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.2.0",
     "duplicate-package-checker-webpack-plugin": "^3.0.0",
-    "eslint": "^8.3.0",
+    "eslint": "^8.4.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-webpack": "^0.13.2",
