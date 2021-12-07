@@ -1,7 +1,6 @@
 import { css } from '@linaria/core';
 import { useEffect } from 'react';
 
-import { socket } from './socket';
 import { voice } from './speech';
 
 export function Prompt({
@@ -16,8 +15,6 @@ export function Prompt({
 }) {
   const text = [title, ...paragraphs, ...verbalInstructions];
   useEffect(() => {
-    socket.send('D1');
-    socket.send('D2');
     for (const p of text) {
       const utterance = new SpeechSynthesisUtterance(p);
       utterance.voice = voice;

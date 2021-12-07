@@ -10,6 +10,7 @@ import { Prompt } from './Prompt';
 import { Pupil } from './Pupil';
 import { exitFullscreen, requestFullscreen } from './fullscreen';
 import { recognition, voice } from './speech';
+import { socket } from './socket';
 
 const root = document.getElementById('root');
 const fullscreen = document.getElementById('fullscreen');
@@ -129,6 +130,9 @@ const App = () => {
         />
       );
     case State.DISPENSE:
+      socket.send('P');
+      socket.send('D1');
+      socket.send('D2');
       return (
         <Prompt
           paragraphs={[

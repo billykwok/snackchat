@@ -1,9 +1,10 @@
 import time
 import logging
-from typing import Any, List, Tuple
+from typing import List
 from adafruit_motor.servo import ContinuousServo
 from adafruit_crickit import crickit
 from starlette.websockets import WebSocket
+import requests
 from uvicorn import Config, Server
 from starlette.applications import Starlette
 from starlette.endpoints import WebSocketEndpoint
@@ -12,6 +13,12 @@ from starlette.middleware.gzip import GZipMiddleware
 from starlette.routing import Mount, WebSocketRoute
 from starlette.staticfiles import StaticFiles
 from uvicorn.config import LOGGING_CONFIG
+import serial
+import adafruit_thermal_printer
+
+ThermalPrinter = adafruit_thermal_printer.get_printer_class(2.69)
+uart = serial.Serial("/dev/serial0", baudrate=19200, timeout=3000)
+printer = ThermalPrinter(uart)
 
 
 LOG_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
@@ -31,7 +38,7 @@ continuous_servos: List[ContinuousServo] = [
     crickit.continuous_servo_3,
     crickit.continuous_servo_4,
 ]
-servo_default_positions = [-0.03, -0.1, -0.05, -0.1]
+servo_default_positions = [-0.05, -0.12, -0.05, -0.1]
 
 
 def dispense(i: int):
@@ -56,7 +63,7 @@ class DataEndpoint(WebSocketEndpoint):
         await websocket.close()
 
     async def on_receive(self, websocket: WebSocket, data: bytes) -> None:
-        logger.debug("Socket: %s, Message: %s", websocket, data)
+        logger.log("Socket: %s, Message: %s", websocket, data)
         if "D1" in data:
             dispense(0)
         if "D2" in data:
@@ -65,6 +72,10 @@ class DataEndpoint(WebSocketEndpoint):
             dispense(2)
         if "D4" in data:
             dispense(3)
+        if "P" in data:
+            r = requests.get("https://stin.to/en/create-chat")
+            printer.print(r.url)
+            printer.print(r.url)
 
 
 def main():
