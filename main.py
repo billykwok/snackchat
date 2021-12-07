@@ -56,14 +56,14 @@ class DataEndpoint(WebSocketEndpoint):
         await websocket.close()
 
     async def on_receive(self, websocket: WebSocket, data: bytes) -> None:
-        logger.debug("Socket: %s, Message: %s", websocket, data.decode("utf-8"))
-        if data == "D1":
+        logger.debug("Socket: %s, Message: %s", websocket, data)
+        if "D1" in data:
             dispense(0)
-        if data == "D2":
+        if "D2" in data:
             dispense(1)
-        if data == "D3":
+        if "D3" in data:
             dispense(2)
-        if data == "D4":
+        if "D4" in data:
             dispense(3)
 
 

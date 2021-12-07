@@ -1,11 +1,11 @@
-export const socket = new WebSocket('ws://localhost:21489/ws');
+export const socket = new WebSocket('ws://192.168.50.1:21489/ws');
 
 socket.onopen = () => {
   console.log('[open] Connection established');
   console.log('Sending to server');
 };
 
-socket.onclose = function (event) {
+socket.onclose = (event) => {
   if (event.wasClean) {
     console.log(
       `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
@@ -15,6 +15,6 @@ socket.onclose = function (event) {
   }
 };
 
-socket.onerror = function (event) {
-  console.error(`[error] ${event.toString()}`);
+socket.onerror = (event) => {
+  console.dir(event);
 };
