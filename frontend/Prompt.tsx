@@ -1,23 +1,33 @@
 import { css } from '@linaria/core';
 import { useEffect } from 'react';
 
+import { socket } from './socket';
 import { voice } from './speech';
 
 export function Prompt({
-  paragraphs,
+  title,
+  paragraphs = [],
+  verbalInstructions = [],
+  textOnly = [],
   ...rest
 }: {
   paragraphs: string[];
   [key: string]: any;
 }) {
+  const text = [title, ...paragraphs, ...verbalInstructions];
   useEffect(() => {
-    for (const p of paragraphs) {
+    socket.send('D1');
+    socket.send('D2');
+    for (const p of text) {
       const utterance = new SpeechSynthesisUtterance(p);
       utterance.voice = voice;
       console.log(p);
       speechSynthesis.speak(utterance);
     }
-  }, []);
+    return () => {
+      speechSynthesis.cancel();
+    };
+  }, [text]);
   return (
     <div
       className={css`
@@ -33,7 +43,7 @@ export function Prompt({
       <div
         className={css`
           display: block;
-          margin: 8rem;
+          margin: 4rem;
           text-align: center;
           font-size: 5rem;
           > p {
@@ -42,8 +52,22 @@ export function Prompt({
           }
         `}
       >
-        {paragraphs.map((p, i) => (
-          <p key={i}>{p}</p>
+        <h1
+          className={css`
+            margin-bottom: 1.5rem;
+          `}
+        >
+          {title}
+        </h1>
+        {paragraphs.concat(textOnly).map((p, i) => (
+          <p
+            key={i}
+            className={css`
+              font-size: 4rem;
+            `}
+          >
+            {p}
+          </p>
         ))}
       </div>
     </div>

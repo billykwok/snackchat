@@ -1,6 +1,6 @@
 import time
 import logging
-from typing import Any, List
+from typing import Any, List, Tuple
 from adafruit_motor.servo import ContinuousServo
 from adafruit_crickit import crickit
 from starlette.websockets import WebSocket
@@ -31,16 +31,15 @@ continuous_servos: List[ContinuousServo] = [
     crickit.continuous_servo_3,
     crickit.continuous_servo_4,
 ]
+servo_default_positions = [-0.03, -0.1, -0.05, -0.1]
 
 
 def dispense(i: int):
     if i < 0 or i > 3:
         raise ValueError("Invalid dispense index")
-    for _ in range(100):
-        continuous_servos[i].throttle = 1
-        time.sleep(0.05)
-        continuous_servos[i].throttle = 0
-        time.sleep(0.05)
+    continuous_servos[i].throttle = 1
+    time.sleep(1)
+    continuous_servos[i].throttle = servo_default_positions[i]
 
 
 class DataEndpoint(WebSocketEndpoint):
@@ -56,8 +55,16 @@ class DataEndpoint(WebSocketEndpoint):
         )
         await websocket.close()
 
-    async def on_receive(self, websocket: WebSocket, data: Any) -> None:
-        logger.debug("Socket: %s, Message: %s", websocket, data)
+    async def on_receive(self, websocket: WebSocket, data: bytes) -> None:
+        logger.debug("Socket: %s, Message: %s", websocket, data.decode("utf-8"))
+        if data == "D1":
+            dispense(0)
+        if data == "D2":
+            dispense(1)
+        if data == "D3":
+            dispense(2)
+        if data == "D4":
+            dispense(3)
 
 
 def main():
@@ -71,14 +78,10 @@ def main():
     server = Server(
         config=Config(
             host="localhost",
-            port=23508,
+            port=21489,
             app=app,
         )
     )
-    # dispense(0)
-    # dispense(1)
-    # dispense(2)
-    # dispense(3)
     server.run()
 
 

@@ -16,7 +16,7 @@ interface webkitSpeechRecognition {
   onend: (event: Event) => void;
   onerror: (event: Event) => void;
   onnomatch: (event: Event) => void;
-  onresult: (event: Event) => void;
+  onresult: (event: SpeechRecognitionEvent) => void;
   onsoundend: (event: Event) => void;
   onsoundstart: (event: Event) => void;
   onspeechend: (event: Event) => void;
@@ -29,6 +29,11 @@ interface webkitSpeechRecognition {
   stop(): void;
 }
 
+declare interface SpeechRecognitionEvent {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+
 declare const webkitSpeechRecognition: {
   prototype: webkitSpeechRecognition;
   new (): webkitSpeechRecognition;
@@ -39,4 +44,3 @@ recognition.continuous = false;
 recognition.lang = 'en-US';
 recognition.interimResults = false;
 recognition.maxAlternatives = 1;
-recognition.onresult = (e) => console.log(e);
