@@ -14,59 +14,6 @@ import { recognition, voice } from './speech';
 const root = document.getElementById('root');
 const fullscreen = document.getElementById('fullscreen');
 
-const socket = new WebSocket('ws://localhost:21489/ws');
-
-socket.onopen = () => {
-  console.log('[open] Connection established');
-  console.log('Sending to server');
-};
-
-socket.onmessage = (event) => {
-  const json = JSON.parse(event.data as string) as Data;
-  if (
-    json.emotion &&
-    Object.keys(COLOR_MAP).includes(json.emotion) &&
-    COLOR_MAP[json.emotion] &&
-    COLOR_MAP[json.emotion] !== params.color
-  ) {
-    params.color = COLOR_MAP[json.emotion];
-  }
-  if (json.handDistance && typeof json.handDistance === 'number') {
-    params.area = json.handDistance * 10;
-  }
-  // if (json.bpm) {
-  //   params.speed = map(json.bpm, 0, 200, 0.05, 1);
-  // }
-  if (json.gsr) {
-    params.value = map(json.gsr, 100, 1000, 1, 250);
-  }
-  if (json.acceleration) {
-    params.inc = Math.round(
-      // map(dist(json.acceleration[0], json.acceleration[1], 0), 0, 3, 0, 10)
-      map(Math.abs(json.acceleration[0]), 0, 10, 5, 0)
-    );
-  }
-  if (json.bpm) {
-    console.log(json.bpm);
-    params.r = map(json.bpm, 50, 120, 4, 50);
-    // params.r = map(json.gyro[2], -3, 3, 4, 50);
-  }
-};
-
-socket.onclose = function (event) {
-  if (event.wasClean) {
-    console.log(
-      `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
-    );
-  } else {
-    console.log('[close] Connection died');
-  }
-};
-
-socket.onerror = function (event) {
-  console.error(`[error] ${event.toString()}`);
-};
-
 fullscreen.addEventListener('click', () => {
   requestFullscreen(document.body, { navigationUI: 'hide' });
 });

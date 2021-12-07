@@ -77,7 +77,7 @@ def main():
     )
     server = Server(
         config=Config(
-            host="localhost",
+            host="0.0.0.0",
             port=21489,
             app=app,
         )
