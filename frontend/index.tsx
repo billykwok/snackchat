@@ -201,7 +201,7 @@ const App = () => {
       return (
         <Prompt
           paragraphs={[
-            "Great conversation! Your snacks are being dispensed. Don't forget to grab your receipts.",
+            'Great conversation! Your snacks are being dispensed. Have a nice day!',
           ]}
           onClick={() => socket.send('INTRO')}
         />
