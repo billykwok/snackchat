@@ -95,7 +95,7 @@ module.exports = (env: { production: boolean }) => ({
     new HtmlWebpackPlugin({
       filename: 'index.html',
       templateContent:
-        '<html><head><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body><div id="root"></div><div id="fullscreen"></div></body></html>',
+        '<html><head><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></head><body><div id="root"></div><div id="container"><div id="prev"></div><div id="fullscreen"></div><div id="next"></div></div></body></html>',
     })
   ),
 });

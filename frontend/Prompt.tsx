@@ -21,9 +21,7 @@ export function Prompt({
       console.log(p);
       speechSynthesis.speak(utterance);
     }
-    return () => {
-      speechSynthesis.cancel();
-    };
+    return () => speechSynthesis.cancel();
   }, [text]);
   return (
     <div

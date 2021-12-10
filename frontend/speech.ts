@@ -1,3 +1,5 @@
+import type { SpeechRecognitionEvent } from './enum';
+
 const voices = speechSynthesis
   .getVoices()
   .filter((v) => v.name.includes('Samantha'));
@@ -27,11 +29,6 @@ interface webkitSpeechRecognition {
   abort(): void;
   start(): void;
   stop(): void;
-}
-
-declare interface SpeechRecognitionEvent {
-  resultIndex: number;
-  results: SpeechRecognitionResultList;
 }
 
 declare const webkitSpeechRecognition: {

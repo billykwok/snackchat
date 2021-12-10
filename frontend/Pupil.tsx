@@ -1,6 +1,31 @@
 import { css } from '@linaria/core';
+import { useCallback, useEffect } from 'react';
+import { useInterval } from 'react-use';
 
-export const Pupil = (props: Record<string, any>) => {
+import { voice } from './speech';
+
+export const Pupil = ({
+  verbalInstructions = [],
+  ...props
+}: {
+  verbalInstructions?: string[];
+  [key: string]: any;
+}) => {
+  const speak = useCallback(() => {
+    for (const p of verbalInstructions) {
+      const utterance = new SpeechSynthesisUtterance(p);
+      utterance.voice = voice;
+      console.log(p);
+      speechSynthesis.speak(utterance);
+    }
+  }, [verbalInstructions]);
+  useInterval(speak, 20000);
+  useEffect(() => {
+    speak();
+    return () => {
+      speechSynthesis.cancel();
+    };
+  });
   return (
     <svg
       className={css`
